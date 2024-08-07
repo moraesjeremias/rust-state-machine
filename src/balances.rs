@@ -18,5 +18,4 @@ impl Pallet {
     pub fn get_balance(&self, address: &String) -> u128 {
         *self.balances.get(address).unwrap_or(&0)
     }
-
 }
