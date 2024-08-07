@@ -22,15 +22,15 @@ mod tests {
 
     #[test]
     pub fn test_balance_get() {
-        let mut balances = setup_initial_balance();
+        let balances = setup_initial_balance();
         let address = String::from("0x123456");
         assert_eq!(balances.get_balance(&address), 100);
     }
 
     #[test]
-    pub fn test_default_balance() {
-        let mut balances = setup_initial_balance();
-        let fakeAddress = String::from("0x00000");
-        assert_eq!(balances.get_balance(&fakeAddress), 0);
+    pub fn test_default_zero_balance() {
+        let balances = setup_initial_balance();
+        let fake_address = String::from("0x00000");
+        assert_eq!(balances.get_balance(&fake_address), 0);
     }
 }
