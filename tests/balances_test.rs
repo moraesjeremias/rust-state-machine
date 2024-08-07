@@ -1,7 +1,6 @@
 #[path = "../src/balances.rs"]
 mod balances;
 
-
 #[cfg(test)]
 mod tests {
     use crate::balances::{self, Pallet};
@@ -12,7 +11,6 @@ mod tests {
         balances.set_balance(&address, 100);
         return balances;
     }
-
 
     #[test]
     pub fn test_balance_set() {
