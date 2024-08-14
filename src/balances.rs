@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use std::collections::BTreeMap;
 
 pub struct Pallet {
@@ -17,5 +18,26 @@ impl Pallet {
 
     pub fn get_balance(&self, address: &String) -> u128 {
         *self.balances.get(address).unwrap_or(&0)
+    }
+
+    pub fn transfer_balance(
+        &mut self,
+        from_address: String,
+        to_address: String,
+        amount: u128,
+    ) -> Result<(), &'static str> {
+        let from_balance = self.get_balance(&from_address);
+        let to_balance = self.get_balance(&to_address);
+
+        let new_from_balance = from_balance
+            .checked_sub(amount)
+            .ok_or("Insuficient balance!")?;
+        let new_to_balance = to_balance
+            .checked_add(amount)
+            .ok_or("Overflow on adding to balance")?;
+
+        self.set_balance(&from_address, new_from_balance);
+        self.set_balance(&to_address, new_to_balance);
+        return Ok(());
     }
 }

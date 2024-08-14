@@ -33,4 +33,32 @@ mod tests {
         let fake_address = String::from("0x00000");
         assert_eq!(balances.get_balance(&fake_address), 0);
     }
+
+    #[test]
+    pub fn test_transfer_use_case() {
+        let mut balances = setup_initial_balance();
+        let from_address = String::from("0x12345");
+        let to_address = String::from("0x98765");
+        balances.set_balance(&from_address, 2000);
+        balances.set_balance(&to_address, 0);
+
+        let _ = balances.transfer_balance(from_address.clone(), to_address.clone(), 500);
+
+        assert_eq!(balances.get_balance(&from_address), 1500);
+        assert_eq!(balances.get_balance(&to_address), 500);
+    }
+
+    #[test]
+    pub fn test_insufficient_balance_transfer() {
+        let mut balances = setup_initial_balance();
+        let from_address = String::from("0x12345");
+        let to_address = String::from("0x98765");
+        balances.set_balance(&from_address, 1000);
+        balances.set_balance(&to_address, 0);
+
+        let transfer = balances.transfer_balance(from_address.clone(), to_address.clone(), 2000);
+        assert_eq!(transfer, Err("Insuficient balance!"));
+        assert_eq!(balances.get_balance(&from_address), 1000);
+        assert_eq!(balances.get_balance(&to_address), 0);
+    }
 }
