@@ -1,31 +1,35 @@
 #![allow(dead_code)]
 use std::collections::BTreeMap;
 
+type AddressID = String;
+type Balance = u128;
+type BalanceMap = BTreeMap<AddressID, Balance>;
+
 #[derive(Debug)]
 pub struct Pallet {
-    balances: BTreeMap<String, u128>,
+    balances: BalanceMap,
 }
 
 impl Pallet {
     pub fn new() -> Self {
         Self {
-            balances: BTreeMap::new(),
+            balances: BalanceMap::new(),
         }
     }
 
-    pub fn set_balance(&mut self, address: &String, amount: u128) {
+    pub fn set_balance(&mut self, address: &AddressID, amount: Balance) {
         self.balances.insert(address.clone(), amount);
     }
 
-    pub fn get_balance(&self, address: &String) -> u128 {
+    pub fn get_balance(&self, address: &AddressID) -> Balance {
         *self.balances.get(address).unwrap_or(&0)
     }
 
     pub fn transfer_balance(
         &mut self,
-        from_address: String,
-        to_address: String,
-        amount: u128,
+        from_address: AddressID,
+        to_address: AddressID,
+        amount: Balance,
     ) -> Result<(), &'static str> {
         let from_balance = self.get_balance(&from_address);
         let to_balance = self.get_balance(&to_address);
