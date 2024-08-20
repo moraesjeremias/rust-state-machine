@@ -1,13 +1,17 @@
 #[path = "../src/balances.rs"]
 mod balances;
 
+#[path = "../src/types.rs"]
+mod types;
+
 #[cfg(test)]
 mod tests {
     use crate::balances::{self, Pallet};
+    use crate::types::{AddressID, Balance};
 
-    fn setup_initial_balance() -> Pallet {
+    fn setup_initial_balance() -> Pallet<AddressID, Balance> {
         let mut balances = balances::Pallet::new();
-        let address = String::from("0x123456");
+        let address = AddressID::from("0x123456");
         balances.set_balance(&address, 100);
         return balances;
     }

@@ -1,10 +1,11 @@
 #![allow(dead_code)]
 mod balances;
 mod system;
+mod types;
 
 #[derive(Debug)]
 pub struct Runtime {
-    balances: balances::Pallet,
+    balances: balances::Pallet<types::AddressID, types::Balance>,
     system: system::Pallet,
 }
 
@@ -27,19 +28,19 @@ fn main() {
     runtime.system.increment_block_number();
     assert_eq!(runtime.system.get_block_number(), 1);
 
-    runtime.system.increment_nonce(&address);
+    runtime.system.increment_nonce(&address.clone());
 
     let _transfer_result = runtime
         .balances
-        .transfer_balance(address.clone(), bob_address.clone(), 30)
+        .transfer_balance(address.clone(), bob_address, 30)
         .map_err(|error| eprintln!("Error on transfer funds: {:?}", error));
 
-    runtime.system.increment_nonce(&address);
+    runtime.system.increment_nonce(&address.clone());
 
     let _second_transfer_result = runtime
         .balances
-        .transfer_balance(address.clone(), charlie_address.clone(), 20)
+        .transfer_balance(address.clone(), charlie_address, 20)
         .map_err(|error| eprintln!("Error on transfer funds: {:?}", error));
-    runtime.balances.get_balance(&address);
+    runtime.balances.get_balance(&address.clone());
     println!("{:#?}", runtime);
 }
