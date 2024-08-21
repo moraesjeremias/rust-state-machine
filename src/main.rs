@@ -6,7 +6,7 @@ mod types;
 #[derive(Debug)]
 pub struct Runtime {
     balances: balances::Pallet<types::AddressID, types::Balance>,
-    system: system::Pallet,
+    system: system::Pallet<types::BlockNumber, types::AddressID, types::Nonce>,
 }
 
 impl Runtime {
