@@ -1,8 +1,8 @@
-#[path = "../src/balances.rs"]
-mod balances;
-
 #[path = "../src/types.rs"]
 mod types;
+
+#[path = "../src/balances.rs"]
+mod balances;
 
 #[cfg(test)]
 mod tests {
@@ -19,7 +19,7 @@ mod tests {
     #[test]
     pub fn test_balance_set() {
         let mut balances = setup_initial_balance();
-        let address = String::from("0x56789");
+        let address = AddressID::from("0x56789");
         balances.set_balance(&address, 200);
         assert_eq!(balances.get_balance(&address), 200);
     }
@@ -27,22 +27,22 @@ mod tests {
     #[test]
     pub fn test_balance_get() {
         let balances = setup_initial_balance();
-        let address = String::from("0x123456");
+        let address = AddressID::from("0x123456");
         assert_eq!(balances.get_balance(&address), 100);
     }
 
     #[test]
     pub fn test_default_zero_balance() {
         let balances = setup_initial_balance();
-        let fake_address = String::from("0x00000");
+        let fake_address = AddressID::from("0x00000");
         assert_eq!(balances.get_balance(&fake_address), 0);
     }
 
     #[test]
     pub fn test_transfer_use_case() {
         let mut balances = setup_initial_balance();
-        let from_address = String::from("0x12345");
-        let to_address = String::from("0x98765");
+        let from_address = AddressID::from("0x12345");
+        let to_address = AddressID::from("0x98765");
         balances.set_balance(&from_address, 2000);
         balances.set_balance(&to_address, 0);
 
@@ -55,8 +55,8 @@ mod tests {
     #[test]
     pub fn test_insufficient_balance_transfer() {
         let mut balances = setup_initial_balance();
-        let from_address = String::from("0x12345");
-        let to_address = String::from("0x98765");
+        let from_address = AddressID::from("0x12345");
+        let to_address = AddressID::from("0x98765");
         balances.set_balance(&from_address, 1000);
         balances.set_balance(&to_address, 0);
 
