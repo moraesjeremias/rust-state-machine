@@ -2,35 +2,37 @@
 use num::{CheckedAdd, CheckedSub, Zero};
 use std::collections::BTreeMap;
 
-#[derive(Debug)]
-pub struct Pallet<AddressID, Balance> {
-    balances: BTreeMap<AddressID, Balance>,
+use crate::types;
+
+pub trait Config: types::Config {
+    type Balance: CheckedAdd + CheckedSub + Copy + Zero;
 }
 
-impl<AddressID, Balance> Pallet<AddressID, Balance>
-where
-    AddressID: Ord + Clone,
-    Balance: Zero + CheckedAdd + CheckedSub + Copy,
-{
+#[derive(Debug)]
+pub struct Pallet<T: Config> {
+    balances: BTreeMap<T::AddressID, T::Balance>,
+}
+
+impl<T: Config> Pallet<T> {
     pub fn new() -> Self {
         Self {
             balances: BTreeMap::new(),
         }
     }
 
-    pub fn set_balance(&mut self, address: &AddressID, amount: Balance) {
+    pub fn set_balance(&mut self, address: &T::AddressID, amount: T::Balance) {
         self.balances.insert(address.clone(), amount);
     }
 
-    pub fn get_balance(&self, address: &AddressID) -> Balance {
-        return *self.balances.get(address).unwrap_or(&Balance::zero());
+    pub fn get_balance(&self, address: &T::AddressID) -> T::Balance {
+        return *self.balances.get(address).unwrap_or(&T::Balance::zero());
     }
 
     pub fn transfer_balance(
         &mut self,
-        from_address: AddressID,
-        to_address: AddressID,
-        amount: Balance,
+        from_address: T::AddressID,
+        to_address: T::AddressID,
+        amount: T::Balance,
     ) -> Result<(), &'static str> {
         let from_balance = self.get_balance(&from_address);
         let to_balance = self.get_balance(&to_address);

@@ -1,10 +1,10 @@
 #![allow(dead_code)]
 use std::collections::BTreeMap;
 
+use crate::types;
 use num::{CheckedAdd, One, Zero};
 
-pub trait Config {
-    type AddressID: Ord + Clone;
+pub trait Config: types::Config {
     type BlockNumber: CheckedAdd + Copy + One + Zero;
     type Nonce: CheckedAdd + Copy + One + Zero;
 }

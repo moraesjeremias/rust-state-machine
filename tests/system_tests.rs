@@ -7,11 +7,14 @@ mod system;
 #[cfg(test)]
 mod tests {
     use crate::system::{self, Config, Pallet};
-    use crate::types::{AddressID, BlockNumber, Nonce};
+    use crate::types::{self, AddressID, BlockNumber, Nonce};
     struct TestConfig;
 
-    impl Config for TestConfig {
+    impl types::Config for TestConfig {
         type AddressID = AddressID;
+    }
+
+    impl Config for TestConfig {
         type BlockNumber = BlockNumber;
         type Nonce = Nonce;
     }
