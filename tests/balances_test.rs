@@ -1,9 +1,6 @@
 #[path = "../src/types.rs"]
 mod types;
 
-#[path = "../src/system.rs"]
-mod system;
-
 #[path = "../src/balances.rs"]
 mod balances;
 
