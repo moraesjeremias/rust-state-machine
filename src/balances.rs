@@ -33,7 +33,7 @@ impl<T: Config> Pallet<T> {
         from_address: T::AddressID,
         to_address: T::AddressID,
         amount: T::Balance,
-    ) -> Result<(), &'static str> {
+    ) -> types::DispatchResult {
         let from_balance = self.get_balance(&from_address);
         let to_balance = self.get_balance(&to_address);
 
