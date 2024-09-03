@@ -1,6 +1,9 @@
 #[path = "../src/types.rs"]
 mod types;
 
+#[path = "../src/support.rs"]
+mod support;
+
 #[path = "../src/system.rs"]
 mod system;
 
