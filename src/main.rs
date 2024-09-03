@@ -1,4 +1,6 @@
 #![allow(dead_code)]
+
+use support::Dispatch;
 mod balances;
 mod support;
 mod system;
@@ -21,12 +23,41 @@ impl balances::Config for Runtime {
     type Balance = types::Balance;
 }
 
+impl support::Dispatch for Runtime {
+    type AddressID = types::AddressID;
+    type Call = types::RuntimeCall;
+
+    fn dispatch(&mut self, address_id: Self::AddressID, call: Self::Call) -> types::DispatchResult {
+        todo!();
+    }
+}
+
 impl Runtime {
     fn new() -> Self {
         Self {
             balances: balances::Pallet::new(),
             system: system::Pallet::new(),
         }
+    }
+
+    fn execute_block(&mut self, block: types::Block) -> types::DispatchResult {
+        self.system.increment_block_number();
+
+        let _ = (self.system.get_block_number() == block.header.block_number)
+            .then(|| ())
+            .ok_or("Invalid Block Number");
+
+        for (index, support::Extrinsic { address, call }) in block.extrinsic.into_iter().enumerate()
+        {
+            self.system.increment_nonce(&address);
+            let _ = self.dispatch(address, call).map_err(|error| {
+                eprintln!(
+                    "Extrinsic Error\n\tBlock Number: {}\n\tExtrinsic Number: {}\n\tError: {}",
+                    block.header.block_number, index, error
+                )
+            });
+        }
+        Ok(())
     }
 }
 
